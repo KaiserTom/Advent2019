@@ -25,8 +25,10 @@ def load_inputs():
 
     return linevectors
 
-def line_drawer(linevectors):
+def get_linecoords(linevectors):
     x, y, shift, totalsteps = 0, 0, 0, 0
+    linecoords = [[0, 0, 1000000]]
+
     switch = {
         "R" : shift_right,
         "L" : shift_left,
@@ -34,24 +36,19 @@ def line_drawer(linevectors):
         "D" : shift_down
     }
 
-    line1coords = [[0, 0, 1000000]]
-    for vector in linevectors[0]:
+    for vector in linevectors:
         direction = vector[0]
         shift = int(vector[1:4])
         x, y = switch[direction](x, y, shift)
         totalsteps = totalsteps + shift
         coord = [x, y, totalsteps]
-        line1coords.append(coord)
+        linecoords.append(coord)
 
-    x, y, totalsteps = 0, 0, 0
-    line2coords = [[0, 0, 1000000]]
-    for vector in linevectors[1]:
-        direction = vector[0]
-        shift = int(vector[1:4])
-        x, y = switch[direction](x, y, shift)
-        totalsteps = totalsteps + shift
-        coord = [x, y, totalsteps]
-        line2coords.append(coord)
+    return linecoords
+
+def line_drawer(linevectors):
+    line1coords = get_linecoords(linevectors[0])
+    line2coords = get_linecoords(linevectors[1])
 
     return line1coords, line2coords
 
